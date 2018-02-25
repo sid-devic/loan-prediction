@@ -45,8 +45,8 @@ csv.drop(deleted_cols, axis=1, inplace=True)
 #print(list(csv.columns.values))
 
 # turn interest into a float
-#csv['int_rate'] = csv['int_rate'].str.split('%').str[0]
-#csv['int_rate'] = csv.int_rate.astype(float)/100.
+csv['int_rate'] = csv['int_rate'].str.split('%').str[0]
+csv['int_rate'] = csv.int_rate.astype(float)/100.
 
 # turn term (installments) into strict int
 csv['term'] = csv['term'].str.split(' ').str[1]

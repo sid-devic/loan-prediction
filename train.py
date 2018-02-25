@@ -102,6 +102,7 @@ plt.title('ROC curve - {}'.format(model_type))
 plt.plot(fpr, tpr, label = 'Logistic Regression' )
 plt.legend(loc=2, prop={'size':11})
 plt.show
+
 #scores = cross_val_score(clf, X_scaled, y , cv=5, scoring='roc_auc')
 
 # models_report_bal, conf_matrix_bal = run_models(X_train, y_train, X_test, y_test, model_type = 'Balanced')
