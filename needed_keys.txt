@@ -1,0 +1,4 @@
+{'inq_last_6mths': 1.5, 'funded_amnt_inv': 3987.5, 'emp_length': 6.5, 'delinq_2yrs': 0.0, 'collection_recovery_fee': 0.0, 'term': 36.0, 'int_rate': 13.09, 'funded_amnt': 4000.0, 'open_acc': 6.0, 'out_prncp_inv': 0.0, 'installment': 120.39500000000001, 'total_pymnt_inv': 4436.775, 'annual_inc': 33000.0, 'loan_amnt': 4000.0, 'collections_12_mths_ex_med': 0.0, 'total_rec_prncp': 3700.0, 'revol_bal': 6780.5, 'dti': 14.57, 'pub_rec': 0.0, 'last_pymnt_amnt': 166.325, 'out_prncp': 0.0, 'total_pymnt': 4436.773876589999, 'total_acc': 11.0, 'recoveries': 0.0, 'total_rec_late_fee': 0.0, 'total_rec_int': 746.225, 'revol_util': 41.1}
+['grade', 'sub_grade', 'home_ownership', 'verification_status', 'issue_d', 'loan_status', 'desc', 'purpose', 'addr_state', 'earliest_cr_line', 'initial_list_status', 'last_pymnt_d', 'last_credit_pull_d']
+
+# only these keys are necessary 
