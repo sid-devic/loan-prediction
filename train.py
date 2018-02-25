@@ -10,6 +10,7 @@ from matplotlib import pyplot
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import pickle
 
 X_scaled = preprocessing.scale(X)
 print(X_scaled)
@@ -72,9 +73,13 @@ print(models_report)
 index_split = int(len(X)/2)
 X_train, y_train = SMOTE().fit_sample(X_scaled[0:index_split, :], y[0:index_split])
 X_test, y_test = X_scaled[index_split:], y[index_split:]
+logi = LogisticRegression()
+logi.fit(X_train, Y_train)
 
 #scores = cross_val_score(clf, X_scaled, y , cv=5, scoring='roc_auc')
 
-models_report_bal, conf_matrix_bal = run_models(X_train, y_train, X_test, y_test, model_type = 'Balanced')
-print(models_report)
+# models_report_bal, conf_matrix_bal = run_models(X_train, y_train, X_test, y_test, model_type = 'Balanced')
+# print(models_report)
+
+
 
