@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 pd.set_option('display.max_columns', 0)
 pd.set_option('display.max_rows', 500)
 # read in loan data
-csv = pd.read_csv('sample.csv', low_memory=False)
+csv = pd.read_csv('loan.csv', low_memory=False)
 
 # plot for visualization
 '''

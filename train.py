@@ -17,6 +17,8 @@ print(X_scaled)
 print('   ')
 print(X_scaled.shape)
 
+save_filename = 'model.sav'
+
 def run_models(X_train, y_train, X_test, y_test, model_type = 'Non-balanced'):
 
     clfs = {'GradientBoosting': GradientBoostingClassifier(max_depth= 6, n_estimators=100, max_features = 0.3),
@@ -74,12 +76,36 @@ index_split = int(len(X)/2)
 X_train, y_train = SMOTE().fit_sample(X_scaled[0:index_split, :], y[0:index_split])
 X_test, y_test = X_scaled[index_split:], y[index_split:]
 logi = LogisticRegression()
-logi.fit(X_train, Y_train)
+logi.fit(X_train, y_train)
 
+y_pred = logi.predict(X_test)
+y_score = logi.predict_proba(X_test)[:,1]
+model_type = "Balanced"
+print('computing {} - {} '.format('Logistic Regression', model_type))
+
+tmp = pd.Series({'model_type': model_type,
+                'model': 'Logistic Regression',
+                'roc_auc_score' : metrics.roc_auc_score(y_test, y_score),
+                'matthews_corrcoef': metrics.matthews_corrcoef(y_test, y_pred),
+                'precision_score': metrics.precision_score(y_test, y_pred),
+                'recall_score': metrics.recall_score(y_test, y_pred),
+                'f1_score': metrics.f1_score(y_test, y_pred)})
+
+#models_report = models_report.append(tmp, ignore_index = True)
+#conf_matrix[clf_name] = pd.crosstab(y_test, y_pred, rownames=['True'], colnames= ['Predicted'], margins=False)
+fpr, tpr, thresholds = metrics.roc_curve(y_test, y_score, drop_intermediate = False, pos_label = 1)
+
+plt.figure(1, figsize=(6,6))
+plt.xlabel('false positive rate')
+plt.ylabel('true positive rate')
+plt.title('ROC curve - {}'.format(model_type))
+plt.plot(fpr, tpr, label = 'Logistic Regression' )
+plt.legend(loc=2, prop={'size':11})
+plt.show
 #scores = cross_val_score(clf, X_scaled, y , cv=5, scoring='roc_auc')
 
 # models_report_bal, conf_matrix_bal = run_models(X_train, y_train, X_test, y_test, model_type = 'Balanced')
 # print(models_report)
 
-
+pickle.dump(logi, open(save_filename, 'wb'))
 
