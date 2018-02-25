@@ -4,26 +4,6 @@ import matplotlib.pyplot as plt
 
 pd.set_option('display.max_columns', 0)
 pd.set_option('display.max_rows', 500)
-
-def grade_mapper(letter):
-    count = 0
-    if letter is 'A':
-        count = 1
-    if letter is 'B':
-        count = 2
-    if letter is 'C':
-        count = 3
-    if letter is 'D':
-        count = 4
-    return count
-    
-
-def subgrade_mapper(subgrade):
-    count = grade_mapper(subgrade[0])
-    count = count + int(subgrade[1])
-    return count
-
-
 # read in loan data
 csv = pd.read_csv('sample.csv', low_memory=False)
 
@@ -80,15 +60,54 @@ col_dates = csv.dtypes[csv.dtypes == 'datetime64[ns]'].index
 for d in col_dates:
     csv[d] = csv[d].dt.to_period('M')
 
-csv['grade'] = csv['grade'].apply(grade_mapper)
-csv['sub_grade'] = csv['sub_grade'].apply(subgrade_mapper)
-
 # dict of median values
 median_dict = {}
+non_ints =[]
 for column in csv:
     try:
         median_dict[column] = csv[column].median()
     except Exception:
+        non_ints.append(column)
         continue
 
 print(median_dict)
+print(non_ints)
+
+csv['amt_difference'] = 'eq'
+csv.loc[(csv['funded_amnt'] - csv['funded_amnt_inv']) > 0,'amt_difference'] = 'less'
+
+csv['delinq_2yrs_cat'] = 'no'
+csv.loc[csv['delinq_2yrs']> 0,'delinq_2yrs_cat'] = 'yes'
+
+csv['inq_last_6mths_cat'] = 'no'
+csv.loc[csv['inq_last_6mths']> 0,'inq_last_6mths_cat'] = 'yes'
+
+csv['pub_rec_cat'] = 'no'
+csv.loc[csv['pub_rec']> 0,'pub_rec_cat'] = 'yes'
+
+# Create new metric
+csv['acc_ratio'] = csv.open_acc / csv.total_acc
+
+features = ['loan_amnt', 'amt_difference', 'term', 
+            'installment', 'grade','emp_length',
+            'home_ownership', 'annual_inc','verification_status',
+            'purpose', 'dti', 'delinq_2yrs_cat', 'inq_last_6mths_cat', 
+            'open_acc', 'pub_rec', 'pub_rec_cat', 'acc_ratio', 'initial_list_status',  
+            'loan_status'
+           ]
+
+X_clean = csv.loc[csv.loan_status != 'Current', features]
+X_clean.head()
+
+mask = (X_clean.loan_status == 'Charged Off')
+X_clean['target'] = 0
+X_clean.loc[mask,'target'] = 1
+
+cat_features = ['term','amt_difference', 'grade', 'home_ownership', 'verification_status', 'purpose', 'delinq_2yrs_cat', 'inq_last_6mths_cat', 'pub_rec_cat', 'initial_list_status']
+
+# Drop any residual missing value (only 24)
+X_clean.dropna(axis=0, how = 'any', inplace = True)
+
+X = pd.get_dummies(X_clean[X_clean.columns[:-2]], columns=cat_features).astype(float)
+y = X_clean['target']
+
