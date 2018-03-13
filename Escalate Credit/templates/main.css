@@ -1,0 +1,21 @@
+#title {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+#inputForm {
+  padding-top: 20px;
+}
+
+#navigation {
+  background-color: rgb(75,75,75);
+  color: white;
+}
+#btndiv {
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+.form-title {
+  padding-bottom: 10px;
+}
